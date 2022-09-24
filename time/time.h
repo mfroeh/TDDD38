@@ -26,7 +26,5 @@ bool operator==(Time const &t1, Time const &t2);
 bool operator<=(Time const &t1, Time const &t2);
 bool operator<(Time const &t1, Time const &t2);
 bool operator!=(Time const &t1, Time const &t2);
-std::basic_istream<char> &operator>>(std::basic_istream<char> &istream,
-                                     Time &time);
-std::basic_ostream<char> &operator<<(std::basic_ostream<char> &ostream,
-                                     Time const &time);
+std::istream &operator>>(std::istream &istream, Time &time);
+std::ostream &operator<<(std::ostream &ostream, Time const &time);

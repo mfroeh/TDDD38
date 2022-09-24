@@ -125,8 +125,7 @@ bool operator<(Time const &t1, Time const &t2) {
 
 bool operator!=(Time const &t1, Time const &t2) { return !(t1 == t2); }
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &istream,
-                                     Time &time) {
+std::istream &operator>>(std::istream &istream, Time &time) {
   string str{};
   istream >> str;
   time.hour = stoi(str.substr(0, 2));
@@ -135,8 +134,7 @@ std::basic_istream<char> &operator>>(std::basic_istream<char> &istream,
   return istream;
 }
 
-std::basic_ostream<char> &operator<<(std::basic_ostream<char> &ostream,
-                                     Time const &time) {
+std::ostream &operator<<(std::ostream &ostream, Time const &time) {
   ostream << to_string(time);
   return ostream;
 }
