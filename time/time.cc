@@ -43,6 +43,7 @@ bool is_am(Time const &time) { return time.hour < 12; }
 Time operator+(unsigned int seconds, Time const &time) {
   return time + seconds;
 }
+
 Time operator+(Time const &time, unsigned int seconds) {
   unsigned int time_total = to_seconds(time);
   // Be careful of overflow
@@ -66,13 +67,9 @@ Time operator-(unsigned int seconds, Time const &time) {
 }
 
 Time &operator++(Time &time) {
-  if (++time.seconds == 60) {
-    time.seconds = 0;
-    if (++time.minutes == 60) {
-      time.minutes = 0;
-      if (++time.hour == 24) {
-        time.hour = 0;
-      }
+  if ((time.seconds = ++time.seconds % 60) == 0) {
+    if ((time.minutes = ++time.minutes % 60) == 0) {
+      time.hour = ++time.hour % 24;
     }
   }
   return time;
