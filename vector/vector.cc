@@ -50,6 +50,7 @@ std::istream &operator>>(std::istream &istream, Vector &v) {
       }
     }
   }
+
   istream.setstate(ios::failbit);
   return istream;
 }
@@ -89,6 +90,7 @@ Vector operator+(Vector const &left, Vector const &right) {
   // Copy initialization
   return Vector{left} += right;
 }
+
 Vector operator-(Vector const &left, Vector const &right) {
   // Copy initialization
   return Vector{left} -= right;

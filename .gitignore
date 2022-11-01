@@ -1,3 +1,8 @@
+# Macos finder
+*.DS_Store
+
+**/build/
+
 # Prerequisites
 *.d
 
