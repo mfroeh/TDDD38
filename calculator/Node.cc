@@ -1,23 +1,8 @@
 #include "Node.h"
 #include <iomanip>
+#include <iostream>
 
 using namespace std;
-
-// #include <iostream>
-// int main(int argc, char *argv[]) {
-//   Number n1{1};
-//   Number n2{2};
-//   Number n3{3};
-//   Number n4{4};
-
-//   Addition a1{&n1, &n2};
-//   Addition a2{&n3, &n4};
-//   Multiplication m1{&a1, &a2};
-//   Subtraction s1{&n3, &n4};
-
-//   m1.print_tree(cout);
-//   m1.print(cout);
-// }
 
 Number::Number(double value) : value{value} {}
 
@@ -33,12 +18,17 @@ void Number::print(std::ostream &os) const { os << value; }
 
 Operator::Operator(Node *left, Node *right) : left{left}, right{right} {}
 
+Operator::~Operator() {
+    delete left;
+    delete right;
+}
+
 void Operator::print_tree(std::ostream &os, int depth) const {
   int dk = 3 * depth;
   right->print_tree(os, depth + 1);
   os << setw(dk + 1) << ""
      << "/" << endl;
-  os << setw(dk) << "" << op << endl;
+  os << setw(dk) << "" << get_glyph() << endl;
   os << setw(dk + 1) << ""
      << "\\" << endl;
   left->print_tree(os, depth + 1);
@@ -56,7 +46,7 @@ void Operator::print(std::ostream &os) const {
     left->print(os);
   }
 
-  os << op;
+  os << get_glyph();
 
   if (is_mul_div && dynamic_cast<Addition *>(right) != nullptr) {
     os << "(";
@@ -67,10 +57,6 @@ void Operator::print(std::ostream &os) const {
   }
 }
 
-Addition::Addition(Node *left, Node *right) : Operator{left, right} {
-  op = '+';
-}
-
 double Addition::evaluate() const {
   return left->evaluate() + right->evaluate();
 }
@@ -79,9 +65,8 @@ Node *Addition::clone() const {
   return new Addition{left->clone(), right->clone()};
 }
 
-Multiplication::Multiplication(Node *left, Node *right)
-    : Operator{left, right} {
-  op = '*';
+char Addition::get_glyph() const {
+    return '+';
 }
 
 double Multiplication::evaluate() const {
@@ -92,8 +77,8 @@ Node *Multiplication::clone() const {
   return new Multiplication{left->clone(), right->clone()};
 }
 
-Subtraction::Subtraction(Node *left, Node *right) : Addition{left, right} {
-  op = '-';
+char Multiplication::get_glyph() const {
+    return '*';
 }
 
 double Subtraction::evaluate() const {
@@ -104,8 +89,8 @@ Node *Subtraction::clone() const {
   return new Subtraction{left->clone(), right->clone()};
 }
 
-Division::Division(Node *left, Node *right) : Multiplication{left, right} {
-  op = '/';
+char Subtraction::get_glyph() const {
+    return '-';
 }
 
 double Division::evaluate() const {
@@ -114,4 +99,8 @@ double Division::evaluate() const {
 
 Node *Division::clone() const {
   return new Division{left->clone(), right->clone()};
+}
+
+char Division::get_glyph() const {
+    return '/';
 }

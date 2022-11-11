@@ -1,29 +1,10 @@
-/*
-  Implement the classes:
-  - Node
-  - Number
-  - Operator
-  - Addition
-  - Subtraction
-  - Multiplication
-  - Division
-
-  Node should have the following (pure virtual) members:
-  - double evaluate()
-    + Calculate the expression stored in 'this'
-  - void print(std::ostream& os)
-    + print the expression represented in 'this'
-  - void print_tree(std::ostream& os, int depth)
-    + print a textual representation of the expression tree
-  - Node* clone()
-    + return a a new instance of the expression stored in 'this'
- */
 #include <memory>
 #include <ostream>
 
 class Node {
 public:
   virtual ~Node() = default;
+
   virtual double evaluate() const = 0;
   virtual void print_tree(std::ostream &os, int depth = 0) const = 0;
   virtual Node *clone() const = 0;
@@ -31,53 +12,69 @@ public:
 };
 
 class Number : public Node {
-private:
-  double value;
-
 public:
   Number(double value);
+
   double evaluate() const override;
   void print_tree(std::ostream &os, int depth = 0) const override;
   Node *clone() const override;
   void print(std::ostream &os) const override;
+
+private:
+  double value;
 };
 
 class Operator : public Node {
+public:
+  Operator(Node *left, Node *right);
+  ~Operator();
+
+  void print_tree(std::ostream &os, int depth = 0) const override;
+  void print(std::ostream &os) const override;
+  
 protected:
   Node *left;
   Node *right;
-  char op;
 
-public:
-  Operator(Node *left, Node *right);
-  void print_tree(std::ostream &os, int depth = 0) const override;
-  void print(std::ostream &os) const override;
+  virtual char get_glyph() const = 0;
 };
 
 class Addition : public Operator {
 public:
-  Addition(Node *left, Node *right);
-  double evaluate() const override;
-  Node *clone() const override;
+  using Operator::Operator;
+  virtual double evaluate() const override;
+  virtual Node *clone() const override;
+
+protected:
+  char get_glyph() const override;
 };
 
 class Multiplication : public Operator {
 public:
-  Multiplication(Node *left, Node *right);
-  double evaluate() const override;
-  Node *clone() const override;
+  using Operator::Operator;
+  virtual double evaluate() const override;
+  virtual Node *clone() const override;
+
+protected:
+  char get_glyph() const override;
 };
 
 class Subtraction : public Addition {
 public:
-  Subtraction(Node *left, Node *right);
+  using Addition::Addition;
   double evaluate() const override;
   Node *clone() const override;
+
+protected:
+  char get_glyph() const override;
 };
 
 class Division : public Multiplication {
 public:
-  Division(Node *left, Node *right);
+  using Multiplication::Multiplication;
   double evaluate() const override;
   Node *clone() const override;
+
+protected:
+  char get_glyph() const override;
 };
