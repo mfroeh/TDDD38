@@ -1,0 +1,35 @@
+2. Discussion: What is a dependent name? How is it related to the keyword typename? What ambiguity problems are related to dependent names?
+
+Answer: A dependent name is a name that depends on a template parameter. It may be the name of a type, or a member function, member variable or inner type. As such, it is important to disambiguate between the thing that the dependent name actually refers to. To tell the compiler that a dependent name refers to a type, the typename keyword should be used. Ambiguity can arise between member variables/functions and inner types. Suppose a function template takes a template parameter T and we have two types:
+
+struct A {
+    struct C { };
+};
+
+struct B
+    static int C{};
+};
+
+The function template may use T::C in some sort of way. The meaning of T::C varies depending on the passed T. For T=A we would refer to the inner struct C and for T=B we would refer to the static member variable C;
+
+5. Discussion: What is pointer (or iterator) invalidation in the context of containers? Give containers that are preferred if we want to avoid pointer invalidation?
+
+Answer: Pointer invalidation in the context of containers occurs when we have a pointer to a some element of a container (e.g. int* ptr{container[2]};) and the container reallocates it's elements because because there isn't enough space or because of insertion/deletion of elements. Our pointer will then point to unallocated memory and formally is invalidated. Pointer invalidation occurs with containers that allocate their elements in one or multiple chunks of memory (e.g. std::vector or std::deque).
+
+7. Discussion: What is the rule of zero and rule of five? How are they related? What special member functions are involved? In your opinion, what is the purpose of these rules?
+
+Answer: The rule of five says that if a class requires either of destructor, copy operations or move operations, it should implement all five of them. The rule of zero says that if all resources within a class are taking care of themselves, the class should not have to implement any of the special member functions, since they can be created by the compiler implicitly. The purpose of these rules is to keep the programmer from making mistakes with regards to memory management. E.g. if we declare a destructor, but not the move constructor and we use the move constructor, it will not nullify the pointers of the moved object which means that on destruction on the move constructor created object, there will be a segmentation fault due to double freeing. See the example below
+
+#include <utility>
+struct A {
+    A(int i) : ptr{ new int{i}} {}
+    ~A() {
+        delete ptr;
+    }
+    int* ptr{};
+};
+
+int main() {
+    A one{123};
+    A two{std::move(one)};
+}
