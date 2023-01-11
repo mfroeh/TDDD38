@@ -1,0 +1,15 @@
+2. Discussion: What is overload resolution? Your answer must include the following:
+- What a candidate function is
+- What parts of a function call is considered when finding candidate functions
+- A full description of the process that disambiguates between multiple candidates
+
+Answer: When code performs a function call, the compiler has to find the function that should be called. This procedure starts by searching outwards from the scope of the context of the function call. This procedure generates candidate functions (functions with the correct name that are visible in the context of the function call). This lookup is based purely on the name of the function. To find out which functions to call, the arguments to the function call are compared with the parameters of the candidate functions. If there is an exact match, the function is called. If there isn't an exact match, function template are considered next. If there is no template match, functions which require argument conversion (without losing information) are considered. If no viable function is found, the process fails and a compile error is thrown.
+
+4. Discussion: Describe both the initialization and the destruction order of data members in a class hierachy. In what order are the constructors/destructors called? In what order are the data members initialized/destroyed?
+
+Answer: Suppose a Class Hierachy A <- B <- C where X <- Y that Y inherits from X (i.e. Y is a X or X is the base class of Y). When calling the constructor of C, it first calls the constructor of B which first calls the constructor of A. A then initializes its members, then B initializes its members and finally C (call order is bottom up, member initialization is top down). When calling the destructor of C (either directly on C or through a virtual function pointer) it first destroys its own members and then implictly calls the detructor of B which destroys its members and calls the destructor of A which finally also destroys its members (call order bottom up, destruction order bottom up).
+
+
+6. Discussion: What are the performance benefits with using STL Ranges/Views rather than STL algorithms? Are there any other benefits besides performance? Explain.
+
+Answer: Because views are lazily evaluated, we don't have to allocate memory for the element of the view. This is both a memory and a execution time performance benefit, since memory allocation is costly. However, the lazy evaluation also mens that we cannot compute things in advance, which we may want in some scenarios. Besides performance, the lazy evaluation of views allows us to generate infinite sequences by e.g. using std::views::iota. Ranges also come with their own implementations for the STL algorithms, which makes their interface clearer, since we only have to pass a range (1 parameter) instead of an iterator range (2 paramteters).
