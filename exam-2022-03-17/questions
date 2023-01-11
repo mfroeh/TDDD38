@@ -1,0 +1,22 @@
+5. Discussion: What is the difference between using parentheses when initializing a variable, and using curly braces? Give a list of what steps each initialization tries. Are there any other differences that are not covered by the steps?
+
+Answer:
+Parentheses (called direct-initialization):
+1. Apropriate constructor
+2. Aggregate initialization
+3. Copy initialization (Try to initialize T with an object of type T)
+
+Braces (called list-initialization):
+1. Aggregate initialization
+2. Apropriate constructor
+3. Copy initialization
+
+Braces improve readability, as parenthesis may be confused with functions. Brace initialization prohibits narrowing conversions: E.g. you may not initialize a double member with an integer. This is an additional compile time safety net, which is always good.
+
+7. Discussion: Describe the differences between std::list and std::deque. Under what circumstances would we pick one over the other? Describe a scenario for each container where that container is prefered over both std::vector and the other mentioned container.
+
+Note: The scenarios you describe doesn’t have to be overly specific, it is enough if you manage to capture the unique traits of each container.
+
+Hint: Think about what you can and cannot do with each container. You can also consider various properties of the iterators for each container.
+
+Answer: The memory allocation model of a deque and a list differ. A list allocates a new node whenever adding an element. A deuque tries to store a new element in one of it's chunks and allocates a new chunk if no space is left. When accessing elements a dequeue has to dereference twice (once the pointer to the chunk pointer table and then the pointer to the chunk at some offset). When accessing an element in a list (that is not the first or the last one) a pointer chain of up to n pointers has to be followed. A list may be favored over both other containers if we don't want the risk of pointer invalidation, which is not possible in lists. When we don't know how many elements we will have, which might mean that we run into many allocations for vectors). Specifically, we would never use a list if we have many elements, since the lookup time depends on n where as the lookup time for vectors and deques is constant.
