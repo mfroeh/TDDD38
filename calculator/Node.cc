@@ -19,8 +19,8 @@ void Number::print(std::ostream &os) const { os << value; }
 Operator::Operator(Node *left, Node *right) : left{left}, right{right} {}
 
 Operator::~Operator() {
-    delete left;
-    delete right;
+  delete left;
+  delete right;
 }
 
 void Operator::print_tree(std::ostream &os, int depth) const {
@@ -65,9 +65,7 @@ Node *Addition::clone() const {
   return new Addition{left->clone(), right->clone()};
 }
 
-char Addition::get_glyph() const {
-    return '+';
-}
+char Addition::get_glyph() const { return '+'; }
 
 double Multiplication::evaluate() const {
   return left->evaluate() * right->evaluate();
@@ -77,9 +75,7 @@ Node *Multiplication::clone() const {
   return new Multiplication{left->clone(), right->clone()};
 }
 
-char Multiplication::get_glyph() const {
-    return '*';
-}
+char Multiplication::get_glyph() const { return '*'; }
 
 double Subtraction::evaluate() const {
   return left->evaluate() - right->evaluate();
@@ -89,9 +85,7 @@ Node *Subtraction::clone() const {
   return new Subtraction{left->clone(), right->clone()};
 }
 
-char Subtraction::get_glyph() const {
-    return '-';
-}
+char Subtraction::get_glyph() const { return '-'; }
 
 double Division::evaluate() const {
   return left->evaluate() / right->evaluate();
@@ -101,6 +95,4 @@ Node *Division::clone() const {
   return new Division{left->clone(), right->clone()};
 }
 
-char Division::get_glyph() const {
-    return '/';
-}
+char Division::get_glyph() const { return '/'; }

@@ -14,9 +14,7 @@ Expression::Expression(Expression &&other) {
   other.root = nullptr;
 }
 
-Expression::~Expression() {
-    delete root;
-}
+Expression::~Expression() { delete root; }
 
 Expression &Expression::operator=(Expression const &rhs) {
   root = rhs.root->clone();

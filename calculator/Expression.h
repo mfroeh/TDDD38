@@ -5,27 +5,24 @@
 
 #include <ostream>
 
-class Expression
-{
+class Expression {
 public:
+  Expression(Node *root);
+  Expression(Expression const &other);
+  Expression(Expression &&other);
+  ~Expression();
 
-    Expression(Node* root);
-    Expression(Expression const& other);
-    Expression(Expression&& other);
-    ~Expression();
+  Expression &operator=(Expression const &rhs);
+  Expression &operator=(Expression &&rhs);
 
-    Expression& operator=(Expression const& rhs);
-    Expression& operator=(Expression&& rhs);
+  double evaluate() const;
+  void print(std::ostream &os) const;
+  void print_tree(std::ostream &os) const;
 
-    double evaluate() const;
-    void print(std::ostream& os) const;
-    void print_tree(std::ostream& os) const;
+  void expand();
 
-    void expand();
-    
 private:
-
-    Node* root;
+  Node *root;
 };
 
-#endif//EXPRESSION_H_
+#endif // EXPRESSION_H_

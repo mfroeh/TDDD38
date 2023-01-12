@@ -2,15 +2,11 @@
 
 using namespace std;
 
-struct X { };
+struct X {};
 
-ostream& operator<<(ostream& os, X const&)
-{
-  return os << "X";
-}
+ostream &operator<<(ostream &os, X const &) { return os << "X"; }
 
-int main()
-{
+int main() {
   // should produce an empty line
   print();
 

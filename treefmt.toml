@@ -1,0 +1,6 @@
+# One CLI to format the code tree - https://github.com/numtide/treefmt
+
+[formatter.cpp]
+command = "clang-format"
+options = [ "-i" ]
+includes = [ "*.cc", "*.h", "*.tcc" ]

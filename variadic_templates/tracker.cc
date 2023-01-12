@@ -1,20 +1,16 @@
-#include <string>
-#include <iostream>
 #include "tracker.h"
+#include <iostream>
+#include <string>
 
 /*
   Put your code here
-  
+
   Or even better, place it in another file
   and include that file.
  */
 
-struct Hello_Worlder
-{
-  std::string get()
-  {
-    return "hello world!";
-  }
+struct Hello_Worlder {
+  std::string get() { return "hello world!"; }
 };
 
 /* The output should be:
@@ -29,18 +25,16 @@ hello world!
 
 */
 
-int main()
-{
+int main() {
   using std::cout;
   using std::endl;
   using std::string;
 
   cout << count<string>() << endl;
-  
+
   Tracker<string> str1{};
   str1 += "str1";
-  for (char c : str1)
-  {
+  for (char c : str1) {
     cout << c;
   }
   Tracker<string> str2{"str2"};
@@ -56,5 +50,4 @@ int main()
   }
   cout << count<Hello_Worlder>() << endl;
   cout << count<string>() << endl;
-  
 }

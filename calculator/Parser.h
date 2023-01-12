@@ -7,12 +7,11 @@
 #include <string>
 
 /* used to report parser errors */
-class parser_error : public std::logic_error
-{
+class parser_error : public std::logic_error {
 public:
-    using std::logic_error::logic_error;
+  using std::logic_error::logic_error;
 };
 
-Expression parse(std::string const& expression);
+Expression parse(std::string const &expression);
 
-#endif//PARSER_H_
+#endif // PARSER_H_

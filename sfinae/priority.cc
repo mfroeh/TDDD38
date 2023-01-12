@@ -1,79 +1,64 @@
-#include <utility>
 #include <iostream>
+#include <utility>
 
 template <typename T>
-auto get_priority(T&& t, int, int, int) -> decltype(t.first())
-{
+auto get_priority(T &&t, int, int, int) -> decltype(t.first()) {
   return t.first();
 }
 
 template <typename T>
-auto get_priority(T&& t, int, int, long) -> decltype(t.second())
-{
+auto get_priority(T &&t, int, int, long) -> decltype(t.second()) {
   return t.second();
 }
 
 template <typename T>
-auto get_priority(T&& t, int, long, long) -> decltype(t.third())
-{
-    return t.third();
+auto get_priority(T &&t, int, long, long) -> decltype(t.third()) {
+  return t.third();
 }
 
-template <typename T>
-int get_priority(T&& t, long, long, long) {
-  return 4;
+template <typename T> int get_priority(T &&t, long, long, long) { return 4; }
+
+template <typename T> int get_priority(T &&t) {
+  return get_priority(std::forward<T>(t), 1, 1, 1);
 }
 
-template <typename T>
-int get_priority(T&& t) {
-    return get_priority(std::forward<T>(t), 1, 1, 1);
-}
-
-struct X
-{
+struct X {
   int first() const { return 1; }
 };
 
-struct Y
-{
+struct Y {
   int second() const { return 2; }
 };
 
-struct Z
-{
+struct Z {
   int third() const { return 3; }
 };
 
-struct XY
-{
+struct XY {
   int first() const { return 1; }
   int second() const { return 2; }
 };
 
-struct XZ
-{
+struct XZ {
   int first() const { return 1; }
   int third() const { return 3; }
 };
 
-struct YZ
-{
+struct YZ {
   int second() const { return 2; }
   int third() const { return 3; }
 };
 
-struct XYZ
-{
+struct XYZ {
   int first() const { return 1; }
   int second() const { return 2; }
   int third() const { return 3; }
 };
 
-int main()
-{
+int main() {
   using std::cout;
   using std::endl;
-  
+
   cout << get_priority(X{}) << endl
        << get_priority(Y{}) << endl
        << get_priority(Z{}) << endl

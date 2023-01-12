@@ -31,7 +31,7 @@ public:
 
   void print_tree(std::ostream &os, int depth = 0) const override;
   void print(std::ostream &os) const override;
-  
+
 protected:
   Node *left;
   Node *right;

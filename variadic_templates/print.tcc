@@ -1,7 +1,6 @@
 #include <iostream>
 
-template <typename ...Ts>
-void print(Ts... list) {
+template <typename... Ts> void print(Ts... list) {
   // Unary left fold
   // expression op ...
   // The comma operator works as a semicolon

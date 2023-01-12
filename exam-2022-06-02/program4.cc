@@ -1,17 +1,17 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <ranges>
-#include <map>
-#include <sstream>
-#include <set>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <ranges>
+#include <set>
+#include <sstream>
+#include <vector>
 
 /*
 
 Example runs:
 
-$ ./a.out example.txt 
+$ ./a.out example.txt
 The following parameters are not defined:
 #0
 #1
@@ -33,49 +33,47 @@ we include third here).
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    if (argc < 2)
-    {
-        std::cerr << "USAGE: " << argv[0] << " TEXT [PARAMETERS...]\n";
-        return 1;
-    }
+int main(int argc, char **argv) {
+  if (argc < 2) {
+    std::cerr << "USAGE: " << argv[0] << " TEXT [PARAMETERS...]\n";
+    return 1;
+  }
 
-    std::ifstream ifs { argv[1] };
-    if (!ifs)
-    {
-        std::cerr << "Error: Unable to open file '" << argv[1] << "'\n";
-        return 2;
-    }
+  std::ifstream ifs{argv[1]};
+  if (!ifs) {
+    std::cerr << "Error: Unable to open file '" << argv[1] << "'\n";
+    return 2;
+  }
 
-    // Recall that any container can be directly initialized with an iterator range
-    vector<string> text{istream_iterator<string>{ifs}, istream_iterator<string>()};
+  // Recall that any container can be directly initialized with an iterator
+  // range
+  vector<string> text{istream_iterator<string>{ifs},
+                      istream_iterator<string>()};
 
-    map<string, string> params{};
-    transform(argv+2, argv+argc, inserter(params, begin(params)),
-            [i=0](char* arg) mutable {
-                ostringstream oss{};
-                oss << "#" << i++;
-                return make_pair(oss.str(), arg);
+  map<string, string> params{};
+  transform(argv + 2, argv + argc, inserter(params, begin(params)),
+            [i = 0](char *arg) mutable {
+              ostringstream oss{};
+              oss << "#" << i++;
+              return make_pair(oss.str(), arg);
             });
 
-    set<string> undefined{};
-    ranges::copy_if(text, inserter(undefined, begin(undefined)), 
-            [&params](string const& s) { 
-                return s[0] == '#' && !params.contains(s); 
-            });
+  set<string> undefined{};
+  ranges::copy_if(text, inserter(undefined, begin(undefined)),
+                  [&params](string const &s) {
+                    return s[0] == '#' && !params.contains(s);
+                  });
 
-    if (undefined.size() > 0) {
-        cerr << "The following parameters are not defined:" << endl;
-        ranges::copy(undefined, ostream_iterator<string>(cerr, "\n"));
-        return -1;
-    }
+  if (undefined.size() > 0) {
+    cerr << "The following parameters are not defined:" << endl;
+    ranges::copy(undefined, ostream_iterator<string>(cerr, "\n"));
+    return -1;
+  }
 
-    vector<string> replaced{};
-    ranges::transform(text, back_inserter(replaced), 
-            [&params](string s) {
-                return s[0] == '#' ? params[s] : s; 
-            }); 
+  vector<string> replaced{};
+  ranges::transform(text, back_inserter(replaced), [&params](string s) {
+    return s[0] == '#' ? params[s] : s;
+  });
 
-    ranges::copy(replaced, ostream_iterator<string>(cout, " "));
+  ranges::copy(replaced, ostream_iterator<string>(cout, " "));
 }
